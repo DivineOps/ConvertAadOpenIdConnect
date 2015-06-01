@@ -1,0 +1,28 @@
+﻿@using System.Security.Claims;
+@{
+	var identity = (ClaimsIdentity)User.Identity;
+	var claims = identity.Claims;
+	var displayNameClaim = claims.FirstOrDefault(p => p.Type.Contains("displayname"));
+	var displayName = displayNameClaim != null ? displayNameClaim.Value : "User";
+}
+@if (Request.IsAuthenticated)
+{
+    <text>
+         <ul class="nav navbar-nav navbar-right">
+            <li>
+				<a href="/Home/UserProfile" target="_self">
+					@displayName
+				</a>
+            </li>
+            <li>
+                @Html.ActionLink("Sign out", "SignOut", "Account")
+            </li>
+        </ul>
+    </text>
+}
+else
+{
+     <ul class="nav navbar-nav navbar-right">
+        <li>@Html.ActionLink("Sign in", "Index", "Home", routeValues: null, htmlAttributes: new { id = "loginLink" })</li>
+    </ul>
+}
